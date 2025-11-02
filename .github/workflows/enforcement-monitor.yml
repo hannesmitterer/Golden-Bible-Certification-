@@ -1,0 +1,105 @@
+name: 🚨 Enforcement Monitor (30-day Block)
+
+on:
+  schedule:
+    # Esegui ogni giorno a mezzanotte UTC (controlla le scadenze)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Consenti l'esecuzione manuale
+
+jobs:
+  check_remediation_deadline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Clona il repository per accedere a POLICY/ENFORCEMENT_POLICY.md e STATUS.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Set up Node.js for GitHub CLI/scripts
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get Issue and Calculate Deadline
+        id: deadline_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Assumi che l'Issue di Remediation sia il #15 come da piano operativo
+          REMEDIATION_ISSUE_NUMBER: 15
+        run: |
+          # 1. Recupera la data di creazione dell'Issue e il corpo
+          ISSUE_INFO=$(gh issue view $REMEDIATION_ISSUE_NUMBER --repo ${{ github.repository }} --json createdAt,body)
+          ISSUE_CREATED_AT=$(echo "$ISSUE_INFO" | jq -r '.createdAt')
+
+          # 2. Estrai la scadenza (assumiamo che sia sempre 30 giorni dopo la creazione, o usiamo un valore fisso)
+          # Utilizziamo la data fissa di ACK: 2025-12-02
+          ACK_DEADLINE="2025-12-02"
+
+          # Calcola se la deadline è passata rispetto alla data di esecuzione (oggi)
+          CURRENT_DATE=$(date -u +%Y-%m-%d)
+          
+          if [[ "$CURRENT_DATE" > "$ACK_DEADLINE" ]]; then
+              echo "::set-output name=deadline_passed::true"
+              echo "Scadenza $ACK_DEADLINE superata. Procedo con il check di ACK."
+          else
+              echo "::set-output name=deadline_passed::false"
+              echo "La scadenza ($ACK_DEADLINE) non è ancora passata. Nessuna azione di enforcement."
+          fi
+
+      - name: Check for Formal Acknowledgement (ACK)
+        if: steps.deadline_check.outputs.deadline_passed == 'true'
+        id: ack_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REMEDIATION_ISSUE_NUMBER: 15
+        run: |
+          # Verifica se l'Issue è stata aggiornata o chiusa (segnalerebbe ACK)
+          # La presenza di un commento o di un aggiornamento nel body (checklist)
+          # indicherebbe che l'ACK è stato ricevuto. Per semplicità, controlliamo lo stato.
+          ISSUE_STATE=$(gh issue view $REMEDIATION_ISSUE_NUMBER --repo ${{ github.repository }} --json state | jq -r '.state')
+          
+          # Cerca una label specifica (es. "acknowledged") che l'agente dovrebbe aggiungere
+          LABELS=$(gh issue view $REMEDIATION_ISSUE_NUMBER --repo ${{ github.repository }} --json labels | jq -r '.labels[].name')
+          
+          if [[ "$LABELS" == *"acknowledged"* ]]; then
+              echo "::set-output name=ack_received::true"
+              echo "ACK ricevuto. Nessuna azione di blocco."
+          elif [[ "$ISSUE_STATE" == "CLOSED" ]]; then
+              echo "::set-output name=ack_received::true"
+              echo "Issue chiusa. Presumo che l'ACK sia implicito. Nessuna azione di blocco."
+          else
+              echo "::set-output name=ack_received::false"
+              echo "ACK non ricevuto. Procedo con l'Enforcement Level 1."
+          fi
+
+      - name: Enforcement Action Level 1 (Update STATUS.json)
+        if: steps.deadline_check.outputs.deadline_passed == 'true' && steps.ack_check.outputs.ack_received == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "ATTIVAZIONE ENFORCEMENT LEVEL 1: Aggiornamento STATUS.json."
+          
+          # Aggiorna STATUS.json (usando jq per modificare il campo 'status')
+          jq '.status = "Non-Compliant - No Response" | .enforcement_level = "Escalation Level 1"' STATUS.json > STATUS_temp.json
+          mv STATUS_temp.json STATUS.json
+          
+          # Crea un branch e una PR per l'aggiornamento dello stato
+          TIMESTAMP=$(date +%s)
+          BRANCH_NAME="enforcement/escalate-no-ack-$TIMESTAMP"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git checkout -b "$BRANCH_NAME"
+          git add STATUS.json
+          git commit -m "🚨 ENFORCEMENT L1: Status updated to 'Non-Compliant - No Response' (30-day ACK missed)"
+          git push origin "$BRANCH_NAME"
+          
+          gh pr create --repo ${{ github.repository }} \
+            --title "🚨 ENFORCEMENT L1: Update Status to Non-Compliant (No ACK Received)" \
+            --body "Aggiornamento automatico dello stato dopo il mancato Acknowledgment (ACK) entro la scadenza del 30° giorno, come definito in POLICY/ENFORCEMENT_POLICY.md. Lo stato è ora: Non-Compliant - No Response (Escalation Level 1)." \
+            --base main --head "$BRANCH_NAME"
+          
+          echo "PR di Enforcement Level 1 creata automaticamente."
