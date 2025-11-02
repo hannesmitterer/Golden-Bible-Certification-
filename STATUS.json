@@ -19,7 +19,7 @@
     "ack_due": "2025-12-02",
     "evidence_due": "2026-02-??",
     "re_audit_due": "2026-03-??",
-    "notes": "ACK entro 30 giorni; evidence machine‑readable entro 90 giorni; re‑audit/nomina auditor entro 120 giorni"
+    "notes": "ACK entro 30 giorni; evidence machine-readable entro 90 giorni; re-audit/nomina auditor entro 120 giorni"
   },
   "enforcement_policy": "POLICY/ENFORCEMENT_POLICY.md",
   "related": {
