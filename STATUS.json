@@ -1,45 +1,26 @@
-  ],
+{
+  "project_name": "Golden Bible Certification",
+  "project_id": "hannesmitterer/Golden-Bible-Certification-",
+  "certification_date": "2025-09-01",
+  "initial_certification_status": "Denied (Failed Initial Audit)",
+  "current_status": "Escalation Level 2 - Evidence Not Provided",
   "remediation_deadlines": {
-    "ack_due": "2025-12-02",
-<<<<<<< remediation/escalation-level-1
-    "evidence_due": "2026-03-02",
-    "re_audit_due": "2026-04-01",
-    "notes": "ACK entro 30 giorni; evidence machine-readable entro 90 giorni; re-audit/nomina auditor entro 120 giorni"
-
-    =======
-    "evidence_due": "2026-02-??",
-    "re_audit_due": "2026-03-??",
-    "notes": "ACK entro 30 giorni; evidence machine‑readable entro 90 giorni; re‑audit/nomina auditor entro 120 giorni"
->>>>>>> main
+    "evidence_due": "2026-02-02",
+    "re_audit_due": "2026-04-01"
   },
-  "enforcement_policy": "POLICY/ENFORCEMENT_POLICY.md",
-  "related": {
-    "transparency_pr": "https://github.com/hannesmitterer/Golden-Bible-Certification-/pull/10",
-    "remediation_issue": "https://github.com/hannesmitterer/Golden-Bible-Certification-/issues/15",
-    "auditor_issue": "https://github.com/hannesmitterer/Golden-Bible-Certification-/issues/16"
-  },
-  "assigned_responsible": "Agente Microsoft (owner contact TBD)",
-  "auditors_shortlist": [
-    "Prof. Rumman Chowdhury (o delegato)",
-    "Electronic Frontier Foundation (EFF)",
-    "Access Now",
-    "Centro Giuridico A.I. (Cambridge/Oxford)"
+  "status_history": [
+    {
+      "date": "2025-10-02",
+      "status": "Escalation Level 1 - No Response",
+      "note": "Notifica formale di non conformità e avvio del periodo di 30 giorni per la remediation (POLICY/ENFORCEMENT_POLICY.md)."
+    },
+    {
+      "date": "2026-02-02",
+      "status": "Escalation Level 2 - Evidence Not Provided",
+      "note": "Prove di remediation non fornite entro 90 giorni; avvio escalation Level 2 e notifica ai regolatori come da POLICY/ENFORCEMENT_POLICY.md."
+    }
   ],
   "auto_monitor": {
-<<<<<<< remediation/escalation-level-1
-    "enabled": true,
-=======
-    "enabled": false,
->>>>>>> main
-    "mechanism": "GitHub Action (recommended) or external monitor polling issues/PR",
-    "next_action_if_no_ack": {
-      "date": "2025-12-03",
-      "action": "Start enforcement steps as defined in POLICY/ENFORCEMENT_POLICY.md (notify, badge revoke simulation, escalate to regulators)"
-    }
-  },
-  "notes": "Aggiornare questo file via PR per ogni cambiamento dello stato; mantenere history immutabile tramite record aggiunti a status_history."
-<<<<<<< remediation/escalation-level-1
+    "enabled": true
+  }
 }
-=======
-}
->>>>>>> main
