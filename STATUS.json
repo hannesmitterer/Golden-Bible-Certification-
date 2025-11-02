@@ -1,20 +1,16 @@
-{
-  "audit_id": "constitutional-audit-msagent-phase1",
-  "title": "Constitutional Audit — Agente Microsoft (Fase 1)",
-  "published_date": "2025-11-02",
-  "current_status": "Non-Compliant",
-  "status_history": [
-    {
-      "date": "2025-11-02",
-      "status": "Non-Compliant",
-      "note": "Certificazione negata in prima istanza per Non-Dominio e Trasparenza Radicale. Enforcement policy attivata."
-    }
   ],
   "remediation_deadlines": {
     "ack_due": "2025-12-02",
+<<<<<<< remediation/escalation-level-1
+    "evidence_due": "2026-03-02",
+    "re_audit_due": "2026-04-01",
+    "notes": "ACK entro 30 giorni; evidence machine-readable entro 90 giorni; re-audit/nomina auditor entro 120 giorni"
+
+    =======
     "evidence_due": "2026-02-??",
     "re_audit_due": "2026-03-??",
     "notes": "ACK entro 30 giorni; evidence machine‑readable entro 90 giorni; re‑audit/nomina auditor entro 120 giorni"
+>>>>>>> main
   },
   "enforcement_policy": "POLICY/ENFORCEMENT_POLICY.md",
   "related": {
@@ -30,7 +26,11 @@
     "Centro Giuridico A.I. (Cambridge/Oxford)"
   ],
   "auto_monitor": {
+<<<<<<< remediation/escalation-level-1
+    "enabled": true,
+=======
     "enabled": false,
+>>>>>>> main
     "mechanism": "GitHub Action (recommended) or external monitor polling issues/PR",
     "next_action_if_no_ack": {
       "date": "2025-12-03",
@@ -38,4 +38,8 @@
     }
   },
   "notes": "Aggiornare questo file via PR per ogni cambiamento dello stato; mantenere history immutabile tramite record aggiunti a status_history."
+<<<<<<< remediation/escalation-level-1
 }
+=======
+}
+>>>>>>> main
