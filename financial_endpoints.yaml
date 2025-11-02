@@ -1,0 +1,35 @@
+# configuration/financial_endpoints.yaml
+# Questa configurazione definisce i tre indirizzi di wallet separati per garantire
+# la massima trasparenza e separazione dei fondi (crowdfunding vs. investimento).
+
+financial_endpoints:
+  # 1. Crowdfunding per Sviluppo e Operatività AI (Wallet MetaMask 1)
+  platform_funding:
+    name: "AI Platform Development Fund"
+    # *** INDIRIZZO REALE DA SOSTITUIRE ***
+    wallet_address: "0xPlatformFunding00000000000000000000000000000000" 
+    purpose: "Software development, AI model training, hosting, and operational costs."
+    is_primary: true
+    label_color: "#1E88E5" # Blu
+
+  # 2. Crowdfunding per Governance, Etica e Audit (Wallet MetaMask 2 - Indipendente)
+  governance_audit:
+    name: "Golden Bible Certification & Audit Fund"
+    # *** INDIRIZZO REALE DA SOSTITUIRE ***
+    wallet_address: "0xGovernanceAudit00000000000000000000000000000000" 
+    purpose: "External audit costs, legal compliance, transparency report generation, and repository hosting."
+    is_primary: false
+    label_color: "#FFC107" # Giallo/Oro (per distinguersi come fondo indipendente)
+
+  # 3. Investimento in Digital Bonds (Wallet MetaMask 3 - Legato al Contratto Smart)
+  digital_bonds_offer:
+    name: "Peace Platform Digital Bond Series A"
+    status: "Active"
+    token_symbol: "PEACEBOND"
+    total_offering_limit: 1000000.00
+    interest_rate_apy: 5.0
+    maturity_years: 3
+    # *** INDIRIZZO REALE DA SOSTITUIRE ***
+    wallet_address: "0xBondInvest00000000000000000000000000000000" 
+    min_investment_usd: 1000.00
+    contract_address: "0xBondContract123456789ABCDEF" # Indirizzo del Contratto Smart Bond (simulato)
