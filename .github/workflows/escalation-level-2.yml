@@ -28,17 +28,11 @@ jobs:
         id: date
         run: echo "TODAY=$(date -u +%F)" >> $GITHUB_OUTPUT
 
-      - name: Skip if before 2026-02-02
-        if: ${{ steps.date.outputs.TODAY < '2026-02-02' }}
+      - name: Skip if before 2026-02-01
+        if: ${{ steps.date.outputs.TODAY < '2026-02-01' }}
         run: |
-          echo "Today is ${{ steps.date.outputs.TODAY }} (UTC) — waiting until 2026-02-02 to run escalation."
+          echo "Today is ${{ steps.date.outputs.TODAY }} (UTC) — waiting until 2026-02-01 to run escalation."
           exit 0
-
-      - name: Download STATUS.json
-        run: |
-          gh api repos/${{ github.repository }}/contents/STATUS.json --jq '.content' | base64 --decode > STATUS.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update STATUS.json (Escalation Level 2)
         run: |
