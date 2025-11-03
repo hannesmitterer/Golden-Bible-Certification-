@@ -1,3 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Peace Platform | GBC Nexus Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<style>
+  /* [CSS OMITTED PER BREVITÀ - STILE PICASSO/MIRÓ INVARIATO] */
+  :root{--accent:#FFC107;--primary:#1E88E5;--critical:#FF5252;--muted:#0f172a;--bg:#f7fafc;}
+  body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--muted);margin:0;overflow-x: hidden;}
+  header{background:var(--primary);color:white;padding:30px 60px;display:flex;justify-content:space-between;align-items:center;border-bottom:10px solid var(--accent);clip-path:polygon(0 0, 100% 0, 100% 90%, 0% 100%);margin: -28px;margin-bottom: 20px;}
+  h1{color:var(--accent);margin:0 0 8px;font-size: 2.8rem;transform: rotate(-3deg);display: inline-block;}
+  h2{color:var(--primary);margin-top:18px;border-left: 5px solid var(--accent);padding-left: 10px;}
+  .btn{display:inline-block;padding:12px 20px;background:var(--critical);color:#fff;border-radius:8px;text-decoration:none;margin-right:15px;font-weight: bold;transform: skewX(-5deg);transition: background 0.2s;box-shadow: 4px 4px 0px #000;cursor: pointer;}
+  .feature{background:#fff;border: 3px solid var(--muted);padding:18px;border-radius:6px;margin:20px 0;transition: transform 0.3s;box-shadow: 6px 6px 0px var(--critical);}
+  .chart-container{width: 85%; margin: 30px auto; background: white; padding: 20px; border: 4px solid var(--muted); transform: rotate(-0.5deg);}
+  #reserved-area{display: none; padding: 50px; background: #333; color: var(--accent); text-align: center; clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%);}
+</style>
+</head>
+<body>
+
+    <header>
+        <div class="title-cubist">AI Peace Platform</div>
+        <nav>
+            <button class="btn" onclick="showLoginModal()">Login Investitori</button>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <section class="feature">
+            <h2>Golden Bible Certification (GBC) Status</h2>
+            <p class="small">Monitoring live funds and ethical invariants for the AI platform.</p>
+            
+            <div class="chart-container">
+                <h3>Fondi Audit e Trasparenza</h3>
+                <canvas id="gbcChart"></canvas>
+                <p style="text-align: center; margin-top: 15px;">
+                    Stato Connessione: <strong id="connection-status" style="color:var(--primary);">Real-Time (Simulato)</strong>
+                </p>
+            </div>
+
+            <div style="background:var(--critical); color:white; padding:15px; margin-top:15px; transform: skewX(2deg);">
+                <strong>Fondi Audit:</strong> <span id="gbc-funds" style="font-size:1.2rem;">**$4,500.00** USD</span>
+                <span style="float:right;">Soglia Minima: **$5,000 USD** | <strong id="gbc-alert">⚠️ CRITICO</strong></span>
+            </div>
+
+        </section>
+
+        <section class="feature">
+            <h2>How to Invest (KarmaBond Operativo)</h2>
+            <ol>
+              <li>Connetti il tuo Wallet alla rete **Sepolia** (Testnet) o **Polygon** (Mainnet).</li>
+              <li>Clicca 'Investi' sotto. (Simulazione transazione).</li>
+            </ol>
+            <button class="btn btn-primary" onclick="handleInvestClick()">Investi Ora (Simulato)</button>
+            <a class="btn" href="**LINK_HANDBOOK_PDF**" download>Scarica Handbook (PDF)</a>
+        </section>
+
+        <section class="feature">
+            <h2>Tranche Release Process</h2>
+            <p>Seed Council uploads proof → compute SHA-256 → submit proofHash on-chain → TrustlessFundingProtocol verifies → emits TrancheReleased → dashboard updates. If invariants fail, funds redirect to the recirculation wallet.</p>
+        </section>
+
+        <section>
+            <h2>Deployment Commands & Addresses</h2>
+            <pre class="code">Compile: npx hardhat compile
+Deploy: npx hardhat run scripts/deploy.js --network sepolia</pre>
+            <p>Foundation/Recirculation Wallet: <code>0x5d61a4B25034393A37ef9307C8Ba3aE99e49944b</code></p>
+            <p>Contratto KarmaBond: <code>**0x...INDIRIZZO_CONTRATTO_KB**</code> (Placeholder - **DEVE** essere aggiornato dopo il deployment)</p>
+            <p>Release tag: <code>v1.0.0-covenant</code></p>
+        </section>
+
+        <div id="reserved-area">
+            <h1>Dashboard Investitori</h1>
+            <p>Autenticazione Wallet Riuscita. Sei connesso come: <span id="wallet-display" style="color:var(--accent);"></span>.</p>
+            <div style="margin-top: 30px; display: flex; justify-content: center; gap: 40px;">
+                <div style="background: #212121; padding: 20px; transform: rotate(-1deg);">
+                    <h3>I Tuoi Karma Bonds</h3>
+                    <p>Deposito Totale: <strong style="color:var(--primary);">**1.25 MATIC**</strong></p>
+                    <p>Rendimento (R1): <strong style="color:#4CAF50;">**4.5%**</strong></p>
+                </div>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 40px;" onclick="logout()">Logout</button>
+        </div>
+
+
+        <footer>
+          <p>Seedbringer — Euystacio Helmi AI. Bundle SHA256: <code>95ad98770f572e6d8764af4a85b878e67391740ceed124799d17178c76fe6b82</code></p>
+        </footer>
+    </div>
+
+    <script>
+        // === PLACEHOLDERS JAVASCRIPT ===
+        const GBC_THRESHOLD = 5000; 
+        const SB_TARGET = 10000;
+        let currentGBC = 4500; 
+        // ===============================
+
+        const gbcCtx = document.getElementById('gbcChart').getContext('2d');
+        
+        // ... (Funzioni showLoginModal, logout, handleInvestClick) ...
+        function handleInvestClick() {
+            // Usa l'indirizzo Foundation come riferimento per la transazione simulata
+            const bondContract = "0x...INDIRIZZO_CONTRATTO_KB";
+            alert(`TRANSAZIONE SIMULATA: L'Investimento KarmaBond è stato inviato al contratto ${bondContract} (simulato) su Sepolia/Polygon.`);
+        }
+
+        // ... (Logica di simulazione e Chart.js) ...
+        
+        const gbcChart = new Chart(gbcCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Fondi Audit', 'Target Etico Mancante', 'Fondi di Sviluppo'],
+                datasets: [{
+                    data: [currentGBC, (GBC_THRESHOLD - currentGBC), 150000],
+                    backgroundColor: ['#D32F2F', '#FFC107', '#1E88E5'],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'right' }, title: { display: false } }
+            }
+        });
+
+        // Simulazione Dati in Tempo Reale
+        setInterval(() => {
+            currentGBC = Math.random() * (GBC_THRESHOLD * 0.6) + (GBC_THRESHOLD * 0.7); 
+            document.getElementById('gbc-funds').textContent = `$${currentGBC.toFixed(2)} USD`;
+            
+            const missing = Math.max(0, GBC_THRESHOLD - currentGBC);
+            gbcChart.data.datasets[0].data[0] = currentGBC;
+            gbcChart.data.datasets[0].data[1] = missing;
+            gbcChart.update();
+
+            const gbcAlert = document.getElementById('gbc-alert');
+            const gbcBox = document.querySelector('.feature:nth-child(1)');
+            if (currentGBC < GBC_THRESHOLD) {
+                gbcAlert.innerHTML = '⚠️ <span style="animation: pulse 1s infinite alternate; color: #FFC107;">CRITICO (Sotto $' + GBC_THRESHOLD + ')</span>';
+                gbcBox.style.boxShadow = '6px 6px 0px #FFC107';
+            } else {
+                gbcAlert.textContent = '✅ OK';
+                gbcBox.style.boxShadow = '6px 6px 0px #4CAF50';
+            }
+        }, 4000);
+    </script>
+</body>
+</html>
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
