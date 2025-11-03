@@ -1,47 +1,40 @@
 # investment_config.yaml
-# Nexus / GGI investment wallet configuration - GBC PRIORITY
-investment_wallets:
-  
+# Configurazione Wallet di Investimento (Ground Control)
+# CONSOLIDAMENTO: Tutte le operazioni finanziarie (Crowdfunding, Audit, Digital Bonds)
+# sono state unificate in un unico indirizzo EVM per ottimizzazione e audit.
+
+investment:
   # ====================================================================
-  # 1. Platform Funding (Standard)
+  # 1. Wallet Primario (Consolidato)
   # ====================================================================
-  platform_funding:
-    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" 
-    chain: "polygon"
+  unified_funding_wallet:
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" # Indirizzo unico EVM per tutte le operazioni
+    chain: "polygon" # ESSENZIALE: Chain/Network (es. Polygon, Arbitrum)
     chain_id: 137
-    asset: "USDC"
-    decimals: 6
+    asset: "USDC" # ESSENZIALE: Asset di Raccolta (es. USDC, ETH)
+    decimals: 6 # ESSENZIALE: Decimali dell'Asset
     target_monthly_seedbringer_usd: 10000.00
-    notes: "Unified wallet - platform development and Seedbringer support."
+    min_balance_threshold_usd: 5000.00 # CRITICO: Soglia minima per audit GBC
+    notes: "Wallet consolidato per tutte le operazioni: Crowdfunding, Governance/Audit, Digital Bonds"
 
   # ====================================================================
-  # 2. GOVERNANCE & AUDIT (GOLDEN BIBLE CERTIFICATION PRIORITY)
+  # 2. Wallet Governance Audit (Disattivato / Reindirizzato)
   # ====================================================================
-  governance_audit:
-    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" 
-    chain: "polygon"
-    chain_id: 137
-    asset: "USDC"
-    decimals: 6
-    # CRITICO: La metrica che la GGI deve monitorare per la GBC
-    min_balance_threshold_usd: 5000.00 
-    notes: "Unified wallet - dedicated audit and governance funds. CRITICAL for GBC maintenance and transparency."
+  governance_audit_note: "Reindirizzato a unified_funding_wallet per efficienza operativa e audit."
   
   # ====================================================================
-  # 3. Digital Bonds Offer (Secondario / In Standby)
+  # 3. Wallet Digital Bonds (Disattivato / Consolidato)
   # ====================================================================
-  digital_bonds_offer:
-    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" 
-    chain: "polygon"
-    chain_id: 137
-    asset: "USDC" 
-    decimals: 6
-    # PLACEHOLDER: Full activation Bond dipende da questo indirizzo
-    contract_address: "!!! INDIRIZZO CONTRATTO KARMABOND MANCANTE !!!" 
-    notes: "Investment in USDC via deployed KarmaBond.sol contract (Currently STANDBY)."
-    offer_start_date: "2025-12-01T00:00:00Z"
-    fundraising_target: 5000000
-    current_status: "In attesa di conferma finale della chain"
+  digital_bonds_note: "Consolidato in unified_funding_wallet."
+  
+  # ====================================================================
+  # Parametri Offerta Digital Bonds
+  # ====================================================================
+  offer_details:
+    start_date: "2025-12-01T00:00:00Z"
+    target_amount: 5000000 # 5 Milioni di unità dell'Asset di Raccolta
+    current_status: "Awaiting Final Chain Confirmation"
+    contract_address: "" # Placeholder per contratto KarmaBond.sol
 
 api:
   metrics_endpoint: "/api/v1/metrics"
