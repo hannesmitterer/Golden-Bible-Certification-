@@ -6,7 +6,7 @@ investment_wallets:
   # 1. Platform Funding (Standard)
   # ====================================================================
   platform_funding:
-    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" 
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" 
     chain: "polygon"
     chain_id: 137
     asset: "USDC"
@@ -18,7 +18,7 @@ investment_wallets:
   # 2. GOVERNANCE & AUDIT (GOLDEN BIBLE CERTIFICATION PRIORITY)
   # ====================================================================
   governance_audit:
-    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" 
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" 
     chain: "polygon"
     chain_id: 137
     asset: "USDC"
@@ -31,14 +31,17 @@ investment_wallets:
   # 3. Digital Bonds Offer (Secondario / In Standby)
   # ====================================================================
   digital_bonds_offer:
-    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" 
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f" 
     chain: "polygon"
     chain_id: 137
-    asset: "MATIC" 
-    decimals: 18
+    asset: "USDC" 
+    decimals: 6
     # PLACEHOLDER: Full activation Bond dipende da questo indirizzo
     contract_address: "!!! INDIRIZZO CONTRATTO KARMABOND MANCANTE !!!" 
-    notes: "Investment in MATIC via deployed KarmaBond.sol contract (Currently STANDBY)."
+    notes: "Investment in USDC via deployed KarmaBond.sol contract (Currently STANDBY)."
+    offer_start_date: "2025-12-01T00:00:00Z"
+    fundraising_target: 5000000
+    current_status: "In attesa di conferma finale della chain"
 
 api:
   metrics_endpoint: "/api/v1/metrics"
