@@ -37,8 +37,10 @@ curl http://localhost:5000/api/v1/metrics
 
 The API reads wallet addresses and configuration from `configuration/financial_endpoints.yaml` and returns real-time metrics including:
 - Platform and governance fund information
-- Digital bonds offering details (wallet: `0x6c10692145718353070cc6cb5c21adf2073ffa1f`)
+- Digital bonds offering details
 - Impact metrics and governance status
+
+**Note:** All wallets have been consolidated to a unified EVM address (`0x6c10692145718353070cc6cb5c21adf2073ffa1f`) on Polygon Mainnet for simplified operations and improved audit efficiency.
 
 ### Configuration
 
