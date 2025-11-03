@@ -82,7 +82,7 @@ PY
 
       - name: Comment on Remediation Issue #15
         run: |
-          gh issue comment 15 --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-02). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
+          gh issue comment 15 --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-01). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
