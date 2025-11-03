@@ -1,20 +1,34 @@
+# configuration/financial_endpoints.yaml
 financial_endpoints:
+  # 1. Crowdfunding per Sviluppo AI (Indirizzo ATTIVO)
   platform_funding:
-    name: Golden Bible Platform Fund
+    name: "AI Platform Development Fund"
     wallet_address: "0xPLATFORMWALLET_REALE"
+    purpose: "Software development, AI model training, hosting, and operational costs."
+    is_primary: true
+    label_color: "#1E88E5"
+
+  # 2. Crowdfunding per Governance/Audit (Indirizzo ATTIVO)
   governance_audit:
-    name: Governance & Audit Fund
+    name: "Golden Bible Certification & Audit Fund"
     wallet_address: "0xGOVERNANCEWALLET_REALE"
+    purpose: "External audit costs, legal compliance, transparency report generation, and repository hosting."
+    is_primary: false
+    label_color: "#FFC107"
+
+  # 3. Investimento in Digital Bonds (Wallet MetaMask 3 - EVM)
   digital_bonds_offer:
-    name: Golden Bonds Series A
-    status: open
-    token_symbol: GBD
-    interest_rate_apy: 8.5
+    name: "Peace Platform Digital Bond Series A"
+    status: "Active"
+    token_symbol: "PEACEBOND"
+    total_offering_limit: 1000000.00
+    interest_rate_apy: 5.0
     maturity_years: 3
-    min_investment_usd: 100
+    # INDIRIZZO EVM FINALE PER I DIGITAL BONDS
     wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f"
-    contract_address: ""   # opzionale: compila se già deployato
-    chain: ""              # es. ethereum, polygon, arbitrum
-    chain_id: ""           # es. 1 (Ethereum), 137 (Polygon)
-    collect_asset: "USDC"  # o ETH/MATIC/… in base alla raccolta
-    asset_decimals: 6
+    min_investment_usd: 1000.00
+    
+    # ⚠️ DETTAGLI MANCANTI NECESSARI PER MONITORAGGIO ON-CHAIN:
+    chain_network: "[INSERIRE: es. Polygon/Arbitrum/Ethereum]"
+    stablecoin_asset: "[INSERIRE: es. USDC / DAI / ETH]"
+    contract_address: "[INSERIRE INDIRIZZO CONTRATTO BOND/TOKEN SE DEPLOYATO]"
