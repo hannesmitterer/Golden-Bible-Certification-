@@ -28,22 +28,17 @@ jobs:
         id: date
         run: echo "TODAY=$(date -u +%F)" >> $GITHUB_OUTPUT
 
-      - name: Skip if before 2026-02-02
-        if: ${{ steps.date.outputs.TODAY < '2026-02-02' }}
+      - name: Skip if before 2026-02-01
+        if: ${{ steps.date.outputs.TODAY < '2026-02-01' }}
         run: |
-          echo "Today is ${{ steps.date.outputs.TODAY }} (UTC) — waiting until 2026-02-02 to run escalation."
+          echo "Today is ${{ steps.date.outputs.TODAY }} (UTC) — waiting until 2026-02-01 to run escalation."
           exit 0
 
-      - name: Download STATUS.json
-        run: |
-          gh api repos/${{ github.repository }}/contents/STATUS.json --jq '.content' | base64 --decode > STATUS.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Update STATUS.json (Escalation Level 2)
+        id: update_status
         run: |
           python3 - <<'PY'
-import json, datetime
+import json, datetime, os
 f = "STATUS.json"
 j = json.load(open(f, "r", encoding="utf-8"))
 j["current_status"] = "Escalation Level 2 - Evidence Not Provided"
@@ -54,6 +49,11 @@ j.setdefault("status_history", []).append({
   "note": "Nessuna evidence di remediation fornita entro 90 giorni; escalation Level 2 attivata in conformità a POLICY/ENFORCEMENT_POLICY.md."
 })
 json.dump(j, open(f, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+# Extract issue number from STATUS.json
+issue_url = j.get("related", {}).get("remediation_issue", "")
+issue_num = issue_url.split("/")[-1] if issue_url else "15"
+with open(os.environ["GITHUB_OUTPUT"], "a") as gh_out:
+  gh_out.write(f"ISSUE_NUMBER={issue_num}\n")
 PY
 
       - name: Commit and push updated STATUS.json to new branch
@@ -80,9 +80,9 @@ PY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Comment on Remediation Issue #15
+      - name: Comment on Remediation Issue
         run: |
-          gh issue comment 15 --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-02). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
+          gh issue comment ${{ steps.update_status.outputs.ISSUE_NUMBER }} --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-01). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
