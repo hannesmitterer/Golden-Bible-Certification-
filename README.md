@@ -47,3 +47,10 @@ Set the `FIN_CONFIG_PATH` environment variable to use a different configuration 
 export FIN_CONFIG_PATH=/path/to/custom/config.yaml
 python app.py
 ```
+
+### Production Deployment
+
+**Important:** The current implementation runs Flask in debug mode, which is suitable for development only. For production deployment:
+1. Set `debug=False` in `app.py` or use an environment variable
+2. Use a production WSGI server like Gunicorn or uWSGI
+3. Configure proper security headers and HTTPS
