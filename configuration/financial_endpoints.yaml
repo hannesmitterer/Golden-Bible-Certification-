@@ -1,21 +1,26 @@
+# configuration/financial_endpoints.yaml
 financial_endpoints:
-  # 1. Crowdfunding per Sviluppo e Operatività AI (Wallet MetaMask 1)
+  # 1. Crowdfunding per Sviluppo AI (Wallet Unico Polygon)
   platform_funding:
     name: "AI Platform Development Fund"
-    wallet_address: "0x5d61a4B25034393A37ef9307C8Ba3aE99e49944b"
+    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD"
+    chain_network: "Polygon Mainnet"
+    chain_id: 137
     purpose: "Software development, AI model training, hosting, and operational costs."
     is_primary: true
     label_color: "#1E88E5"
 
-  # 2. Crowdfunding per Governance, Etica e Audit (Wallet MetaMask 2 - Indipendente)
+  # 2. Crowdfunding per Governance/Audit (Wallet Unico Polygon)
   governance_audit:
     name: "Golden Bible Certification & Audit Fund"
     wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD"
+    chain_network: "Polygon Mainnet"
+    chain_id: 137
     purpose: "External audit costs, legal compliance, transparency report generation, and repository hosting."
     is_primary: false
     label_color: "#FFC107"
 
-  # 3. Investimento in Digital Bonds (Wallet MetaMask 3 - Legato al Contratto Smart)
+  # 3. Investimento in Digital Bonds (Wallet Unico Polygon)
   digital_bonds_offer:
     name: "Peace Platform Digital Bond Series A"
     status: "Active"
@@ -23,6 +28,9 @@ financial_endpoints:
     total_offering_limit: 1000000.00
     interest_rate_apy: 5.0
     maturity_years: 3
-    wallet_address: "0xBondInvest00000000000000000000000000000000"
+    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD"
+    chain_network: "Polygon Mainnet"
+    chain_id: 137
+    stablecoin_asset: "USDC"
     min_investment_usd: 1000.00
-    contract_address: "0xBondContract123456789ABCDEF"
+    contract_address: ""
