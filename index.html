@@ -3,6 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Peace Platform | GBC Nexus</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        /* ===================================== */
+        /* BASE & TYPOGRAPHY (PICASSOS/MIRÓ STYLE) */
+        /* ===================================== */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #F5F5F5;
+            color: #212121;
+            margin: 0;
+            overflow-x: hidden; /* Previene scroll orizzontale da elementi asimmetrici */
+        }
+        header {
+            background: #1E88E5; /* Blu Elettrico */
+            color: white;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 10px solid #FFC107; /* Linea Audace */
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%); /* Forma geometrica non standard */
+        }
+        .title-cubist {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #FFC107;
+            transform: rotate(-3deg);
+            transition: color 0.3s;
+        }
+        .title-cubist:hover { color: #FFFFFF; }
+
+        /* BOTTONI (Forme e Ombre Nette) */
+        .dynamic-button {
+            padding: 12px 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 6px 6px 0px black; /* Effetto 3D piatto */
+        }
+        .login-button {
+            background: #FF5252; /* Rosso Acceso */
+            color: white;
+            transform: skewX(5deg);
+        }
+        .login-button:hover {
+            background: #D32F2F;
+            transform: skewX(5deg) scale(1.05);
+        }
+        .invest-button {
+            background: #4CAF50; /* Verde Contrasto */
+            color: white;
+            transform: skewX(-10deg);
+        }
+        .invest-button:hover {
+            background: #388E3C;
+            transform: skewX(-10deg) scale(1.05);
+        }
+        
+        /* METRICHE (Dinamismo e Colore) */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 80%;
+            margin: 60px auto;
+        }
+        .metric-box {
+            padding: 30px;
+            border: 3px solid #212121;
+            transition: background 0.5s, transform 0.3s;
+            position: relative;
+        }
+        .metric-box:hover {
+            transform: translateY(-5px) rotate(-1deg);
+            box-shadow: 10px 10px 0px #FFC107; /* Ombra Gialla Dinamica */
+        }
+        .critical {
+            background: #FFD2D2;
+            border-left: 12px solid #D32F2F; 
+        }
+        .safe {
+            background: #E0E0E0;
+            border-left: 12px solid #4CAF50;
+        }
+        .highlight { color: #1E88E5; font-size: 1.5rem; font-weight: bold; }
+        .alert-text {
+            animation: pulse 1s infinite alternate;
+            font-weight: 900;
+        }
+
+        /* GRAFICO (Cuore del Nexus) */
+        .chart-container {
+            width: 85%;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: -15px 15px 0px #FF5252; /* Ombra Rossa Dinamica */
+            border: 4px solid #212121;
+            transform: rotate(1deg);
+        }
+        
+        /* ANIMAZIONE ALERT */
+        @keyframes pulse {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
+        }
+
+        /* AREA RISERVATA */
+        #reserved-area {
+            display: none;
+            min-height: 80vh;
+            padding: 80px;
+            background: #333;
+            color: #FFC107;
+            text-align: center;
+            clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="title-cubist">AI Peace Platform</div>
+        <nav>
+            <button class="dynamic-button login-button" onclick="showLoginModal()">Login Investitori</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="chart-container">
+            <h2><span style="color:#1E88E5;">TORA-Nexus</span> Telemetry (Real-Time GBC)</h2>
+            <canvas id="gbcChart"></canvas>
+            <p style="text-align: center; margin-top: 15px;">
+                Stato Connessione: <strong id="connection-status" style="color:#4CAF50;">Nexus LIVE (Simulato)</strong>
+            </p>
+        </div>
+
+        <div class="metric-grid">
+            
+            <div id="gbc-metric" class="metric-box critical">
+                <h3>Golden Bible Certification (GBC) Focus</h3>
+                <p>Fondi Audit: <strong id="gbc-funds" class="highlight">$4,500.00 USD</strong></p>
+                <p>Soglia Minima: **$5,000 USD**</p>
+                <p>Stato Attuale: <strong id="gbc-alert" class="alert-text">⚠️ CRITICO</strong></p>
+            </div>
+
+            <div id="seedbringer-metric" class="metric-box safe">
+                <h3>Sostegno Seedbringer Mensile</h3>
+                <p>Obiettivo Raggiunto: <strong id="seedbringer-progress" class="highlight">$7,500.00 / $10,000 USD</strong></p>
+                <p>Progetto: **AI Tora Kernel Upgrade**</p>
+                <p>Status: <strong id="seedbringer-alert">Target da Raggiungere</strong></p>
+            </div>
+        </div>
+
+        <div style="text-align: center; padding: 40px 20px;">
+            <h2>Diventa un Seedbringer Etico</h2>
+            <p style="color: #666;">Investi in Karma Bonds (Polygon MATIC) per sostenere la GBC.</p>
+            <button class="dynamic-button invest-button" onclick="handleInvestClick()">
+                Investi in Karma Bonds
+            </button>
+            <p style="margin-top: 20px;"><a href="#" onclick="showBondDetails()" style="color: #1E88E5; font-weight: bold;">Vedi Invariants (MATL/R1)</a></p>
+        </div>
+    </main>
+
+    <div id="reserved-area">
+        <h1>Dashboard Investitori</h1>
+        <p>Autenticazione Wallet Riuscita. Benvenuto, <span id="wallet-display"></span>.</p>
+        
+        <div style="margin-top: 30px; display: flex; justify-content: center; gap: 40px;">
+            <div style="background: #212121; padding: 20px; transform: rotate(-1deg);">
+                <h3>Karma Bond Invariants</h3>
+                <p>R1 (Rendimento): <strong style="color:#4CAF50;">4.5%</strong></p>
+                <p>MATL (Max Loss): <strong style="color:#FF5252;">10%</strong></p>
+            </div>
+            <div style="background: #212121; padding: 20px; transform: rotate(1deg);">
+                <h3>Il Tuo Investimento</h3>
+                <p>Deposito Totale: <strong style="color:#FFC107;">1.25 MATIC</strong></p>
+                <p>Stato: **In Attesa di Redeem**</p>
+            </div>
+        </div>
+
+        <button class="dynamic-button login-button" style="margin-top: 40px;" onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        const GBC_THRESHOLD = 5000;
+        const SB_TARGET = 10000;
+        const gbcCtx = document.getElementById('gbcChart').getContext('2d');
+        let currentGBC = 4500; // Valore iniziale
+
+        // --- Logica Modale e Funzioni Operanti ---
+        function showLoginModal() {
+            const walletAddress = prompt("WALLET CONNECT SIMULATO:\nConferma l'accesso con il tuo indirizzo (es. 0xSeedbringer...):");
+            if (walletAddress && walletAddress.startsWith('0x')) {
+                document.querySelector('main').style.display = 'none';
+                document.getElementById('reserved-area').style.display = 'block';
+                document.getElementById('wallet-display').textContent = walletAddress.substring(0, 10) + '...';
+                alert("Accesso Riuscito: Autenticazione On-Chain Simulata.");
+            } else if (walletAddress !== null) {
+                alert("Accesso Fallito: Indirizzo Wallet non valido.");
+            }
+        }
+
+        function logout() {
+            document.querySelector('main').style.display = 'block';
+            document.getElementById('reserved-area').style.display = 'none';
+        }
+
+        function handleInvestClick() {
+            alert("WALLET CONNECT WIDGET:\nSimulazione transazione inviata al contratto KarmaBond.sol su Polygon Mainnet!");
+        }
+        
+        function showBondDetails() {
+            alert("INVARIANTS KARMABOND:\nMATL: 10% | R1: 4.5%\nQuesti valori sono aggiornati dall'Owner/DAO on-chain e sono soggetti alle condizioni del Bond etico.");
+        }
+
+
+        // --- Logica Grafico Dinamico (Chart.js) ---
+        const gbcChart = new Chart(gbcCtx, {
+            type: 'polarArea', // Tipo di grafico insolito (Miró)
+            data: {
+                labels: ['Fondi Audit (GBC)', 'Target Seedbringer', 'Apertura Bond'],
+                datasets: [{
+                    label: 'USD Value',
+                    data: [currentGBC, 7500, 50000],
+                    backgroundColor: [
+                        '#D32F2F', 
+                        '#FFC107', 
+                        '#1E88E5'
+                    ],
+                    borderColor: '#212121',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: { display: false }
+                }
+            }
+        });
+
+        // --- Simulazione Dati in Tempo Reale ---
+        setInterval(() => {
+            // Aggiornamento Dati Casuali
+            currentGBC = Math.random() * 8000 + 1000;
+            const newSeedbringer = Math.random() * 12000;
+            
+            // Aggiorna HTML
+            document.getElementById('gbc-funds').textContent = `$${currentGBC.toFixed(2)} USD`;
+            document.getElementById('seedbringer-progress').textContent = `$${newSeedbringer.toFixed(2)} / $10,000 USD`;
+
+            // Aggiorna Grafico
+            gbcChart.data.datasets[0].data[0] = currentGBC;
+            gbcChart.data.datasets[0].data[1] = newSeedbringer;
+            gbcChart.update();
+
+            // Logica GBC Alert
+            const gbcMetricBox = document.getElementById('gbc-metric');
+            const gbcAlert = document.getElementById('gbc-alert');
+            if (currentGBC < GBC_THRESHOLD) {
+                gbcMetricBox.className = 'metric-box critical';
+                gbcAlert.innerHTML = '⚠️ <span class="alert-text">CRITICO</span>';
+            } else {
+                gbcMetricBox.className = 'metric-box safe';
+                gbcAlert.textContent = '✅ OK';
+            }
+
+            // Logica Seedbringer Alert
+            const sbAlert = document.getElementById('seedbringer-alert');
+            if (newSeedbringer >= SB_TARGET) {
+                sbAlert.textContent = '🎉 Obiettivo Raggiunto!';
+            } else {
+                sbAlert.textContent = 'Target da Raggiungere';
+            }
+        }, 3000); // Aggiorna ogni 3 secondi per dinamicità
+    </script>
+
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GGI Control Panel: Seedbringer & Council</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
