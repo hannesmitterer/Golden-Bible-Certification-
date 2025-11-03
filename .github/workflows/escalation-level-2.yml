@@ -70,19 +70,35 @@ PY
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract remediation issue number from STATUS.json
+        id: issue_number
+        run: |
+          ISSUE_URL=$(jq -r '.related.remediation_issue // ""' STATUS.json)
+          if [ -z "$ISSUE_URL" ]; then
+            echo "Error: remediation_issue not found in STATUS.json"
+            exit 1
+          fi
+          ISSUE_NUM=$(echo "$ISSUE_URL" | grep -oP 'issues/\K\d+$')
+          if [ -z "$ISSUE_NUM" ]; then
+            echo "Error: Could not extract issue number from URL: $ISSUE_URL"
+            exit 1
+          fi
+          echo "ISSUE_NUMBER=$ISSUE_NUM" >> $GITHUB_OUTPUT
+          echo "Extracted issue number: $ISSUE_NUM"
+
       - name: Create Pull Request for STATUS.json update
         run: |
           BRANCH="${{ steps.commit.outputs.BRANCH }}"
           gh pr create --repo "${{ github.repository }}" \
             --title "Automated: Escalation Level 2 — STATUS.json update" \
-            --body $'Automated escalation: STATUS.json updated to \"Escalation Level 2 - Evidence Not Provided\" after 90 days without evidence. See POLICY/ENFORCEMENT_POLICY.md and Issue #15.' \
+            --body $'Automated escalation: STATUS.json updated to \"Escalation Level 2 - Evidence Not Provided\" after 90 days without evidence. See POLICY/ENFORCEMENT_POLICY.md and Issue #${{ steps.issue_number.outputs.ISSUE_NUMBER }}.' \
             --base main --head "$BRANCH"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Comment on Remediation Issue #15
+      - name: Comment on Remediation Issue
         run: |
-          gh issue comment 15 --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-01). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
+          gh issue comment ${{ steps.issue_number.outputs.ISSUE_NUMBER }} --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-01). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
