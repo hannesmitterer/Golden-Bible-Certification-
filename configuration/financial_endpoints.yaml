@@ -1,26 +1,22 @@
 # configuration/financial_endpoints.yaml
 financial_endpoints:
-  # 1. Crowdfunding per Sviluppo AI (Wallet Unico Polygon)
+  # 1. Crowdfunding per Sviluppo AI (Indirizzo ATTIVO)
   platform_funding:
     name: "AI Platform Development Fund"
-    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD"
-    chain_network: "Polygon Mainnet"
-    chain_id: 137
+    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" # Indirizzo REALE già inserito
     purpose: "Software development, AI model training, hosting, and operational costs."
     is_primary: true
     label_color: "#1E88E5"
 
-  # 2. Crowdfunding per Governance/Audit (Wallet Unico Polygon)
+  # 2. Crowdfunding per Governance/Audit (Indirizzo ATTIVO)
   governance_audit:
-    name: "Golden Bible Certification & Audit Fund"
-    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD"
-    chain_network: "Polygon Mainnet"
-    chain_id: 137
+    name: "Golden Bible Certification &amp; Audit Fund"
+    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" # Indirizzo REALE già inserito
     purpose: "External audit costs, legal compliance, transparency report generation, and repository hosting."
     is_primary: false
     label_color: "#FFC107"
 
-  # 3. Investimento in Digital Bonds (Wallet Unico Polygon)
+  # 3. Investimento in Digital Bonds (Wallet MetaMask 3 - EVM)
   digital_bonds_offer:
     name: "Peace Platform Digital Bond Series A"
     status: "Active"
@@ -28,9 +24,11 @@ financial_endpoints:
     total_offering_limit: 1000000.00
     interest_rate_apy: 5.0
     maturity_years: 3
-    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD"
+    # INDIRIZZO EVM FINALE PER I DIGITAL BONDS
+    wallet_address: "0x6c10692145718353070cc6cb5c21adf2073ffa1f"
+    min_investment_usd: 100.00
+    
+    # ⚠️ DETTAGLI MANCANTI NECESSARI PER MONITORAGGIO ON-CHAIN:
     chain_network: "Polygon Mainnet"
-    chain_id: 137
     stablecoin_asset: "USDC"
-    min_investment_usd: 1000.00
-    contract_address: ""
+    contract_address: "[INSERIRE INDIRIZZO CONTRATTO BOND/TOKEN SE DEPLOYATO]"
