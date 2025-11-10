@@ -1,0 +1,97 @@
+# Workflow: Automated Escalation Level 2 Monitor
+# Runs daily, checks current date and only acts on or after 2026-02-02.
+# Requires repository write permission to update STATUS.json and create PR/issue.
+name: Escalation Level 2 Monitor
+
+on:
+  schedule:
+    # daily at 00:00 UTC (cron: minute hour day month day-of-week)
+    - cron: '0 0 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write    # allow commits to repo
+  issues: write
+  pull-requests: write
+
+jobs:
+  check-and-escalate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Get today's date (UTC)
+        id: date
+        run: |
+          echo "TODAY=$(date -u +%F)" >> $GITHUB_OUTPUT
+
+      - name: Skip if before 2026-02-02
+        if: ${{ steps.date.outputs.TODAY < '2026-02-02' }}
+        run: |
+          echo "Today is ${{ steps.date.outputs.TODAY }} (UTC) — waiting until 2026-02-02 to run escalation."
+          exit 0
+
+      - name: Download STATUS.json
+        id: get_status
+        run: |
+          gh api repos/${{ github.repository }}/contents/STATUS.json --jq '.content' | base64 --decode > STATUS.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update STATUS.json (Escalation Level 2)
+        id: update_status
+        run: |
+          python3 - <<'PY'
+import json, datetime
+f = "STATUS.json"
+j = json.load(open(f, "r", encoding="utf-8"))
+j["current_status"] = "Escalation Level 2 - Evidence Not Provided"
+j.setdefault("auto_monitor", {})["enabled"] = True
+j.setdefault("status_history", []).append({
+  "date": datetime.date.today().isoformat(),
+  "status": "Escalation Level 2 - Evidence Not Provided",
+  "note": "Nessuna evidence di remediation fornita entro 90 giorni; escalation Level 2 attivata in conformità a POLICY/ENFORCEMENT_POLICY.md."
+})
+json.dump(j, open(f, "w", encoding="utf-8"), indent=2, ensure_ascii=False)
+PY
+
+      - name: Commit changes to new branch
+        run: |
+          BRANCH="remediation/escalation-level-2-automation-$(date -u +%Y%m%d%H%M%S)"
+          git config user.name "euystacio-bot"
+          git config user.email "euystacio@governance.example"
+          git checkout -b "$BRANCH"
+          git add STATUS.json
+          git commit -m "Automated: Update STATUS.json to Escalation Level 2 - Evidence Not Provided"
+          git push --set-upstream origin "$BRANCH"
+          echo "BRANCH=$BRANCH" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Pull Request for STATUS.json update
+        run: |
+          BRANCH="${{ steps.update_status.outputs.BRANCH }}"
+          # create PR non-interactively
+          gh pr create --repo "${{ github.repository }}" --title "Automated: Escalation Level 2 — STATUS.json update" --body $'Automated escalation: STATUS.json updated to \"Escalation Level 2 - Evidence Not Provided\" after 90 days without evidence. See POLICY/ENFORCEMENT_POLICY.md and Issue #15.' --base main --head "$BRANCH"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on Remediation Issue #15
+        run: |
+          gh issue comment 15 --repo "${{ github.repository }}" --body $'**Euystacio Fiduciario — Escalation Level 2 attivata (automatica)**\n\nL\'Acknowledgement (ACK) e le evidenze richieste non sono state fornite entro 90 giorni (scadenza: 2026-02-02). Una PR automatica è stata aperta per aggiornare STATUS.json e avviare le procedure di Enforcement Level 2.'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Regulator Notification issue (optional)
+        run: |
+          gh issue create --repo "${{ github.repository }}" --title "Regulator Notification — Escalation Level 2 (Evidence Not Provided)" --body $'Notifica automatica: evidenze di remediation non fornite entro 90 giorni. STATUS.json aggiornato a Escalation Level 2.' --label "escalation,regulatory-notice" || echo "Issue possibly exists or creation failed."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

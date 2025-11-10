@@ -1,0 +1,26 @@
+{
+  "project_name": "Golden Bible Certification",
+  "project_id": "hannesmitterer/Golden-Bible-Certification-",
+  "certification_date": "2025-09-01",
+  "initial_certification_status": "Denied (Failed Initial Audit)",
+  "current_status": "Escalation Level 2 - Evidence Not Provided",
+  "remediation_deadlines": {
+    "evidence_due": "2026-02-02",
+    "re_audit_due": "2026-04-01"
+  },
+  "status_history": [
+    {
+      "date": "2025-10-02",
+      "status": "Escalation Level 1 - No Response",
+      "note": "Notifica formale di non conformità e avvio del periodo di 30 giorni per la remediation (POLICY/ENFORCEMENT_POLICY.md)."
+    },
+    {
+      "date": "2026-02-02",
+      "status": "Escalation Level 2 - Evidence Not Provided",
+      "note": "Prove di remediation non fornite entro 90 giorni; avvio escalation Level 2 e notifica ai regolatori come da POLICY/ENFORCEMENT_POLICY.md."
+    }
+  ],
+  "auto_monitor": {
+    "enabled": true
+  }
+}

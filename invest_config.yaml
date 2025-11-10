@@ -1,0 +1,60 @@
+# investment_config.yaml
+# Nexus / GGI investment wallet configuration - GBC PRIORITY
+investment_wallets:
+  
+  # ====================================================================
+  # 1. Platform Funding (Standard)
+  # ====================================================================
+  platform_funding:
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" 
+    chain: "polygon"
+    chain_id: 137
+    asset: "USDC"
+    decimals: 6
+    target_monthly_seedbringer_usd: 10000.00
+    notes: "Unified wallet - platform development and Seedbringer support."
+
+  # ====================================================================
+  # 2. GOVERNANCE & AUDIT (GOLDEN BIBLE CERTIFICATION PRIORITY)
+  # ====================================================================
+  governance_audit:
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" 
+    chain: "polygon"
+    chain_id: 137
+    asset: "USDC"
+    decimals: 6
+    # CRITICO: La metrica che la GGI deve monitorare per la GBC
+    min_balance_threshold_usd: 5000.00 
+    notes: "Unified wallet - dedicated audit and governance funds. CRITICAL for GBC maintenance and transparency."
+  
+  # ====================================================================
+  # 3. Digital Bonds Offer (Secondario / In Standby)
+  # ====================================================================
+  digital_bonds_offer:
+    address: "0x6c10692145718353070cc6cb5c21adf2073ffa1fD" 
+    chain: "polygon"
+    chain_id: 137
+    asset: "MATIC" 
+    decimals: 18
+    # PLACEHOLDER: Full activation Bond dipende da questo indirizzo
+    contract_address: "!!! INDIRIZZO CONTRATTO KARMABOND MANCANTE !!!" 
+    notes: "Investment in MATIC via deployed KarmaBond.sol contract (Currently STANDBY)."
+
+api:
+  metrics_endpoint: "/api/v1/metrics"
+  host: "http://127.0.0.1:5000"
+
+monitoring:
+  provider: "alchemy" 
+  webhook:
+    enabled: true
+    events: ["incoming_transfer", "transfer"]
+    
+alerts:
+  on_thresholds:
+    # FOCUS GBC: Allarme critico se i fondi Audit scendono
+    governance_min_balance:
+      enabled: true
+      thresholds:
+        - level: "critical"
+          value: 5000 # Unità in asset (USDC)
