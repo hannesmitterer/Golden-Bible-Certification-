@@ -22,5 +22,7 @@
   ],
   "auto_monitor": {
     "enabled": true
-  }
+  },
+  "status": "Non-Compliant - No Response",
+  "enforcement_level": "Escalation Level 1"
 }
